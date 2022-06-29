@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import AddDeleteTableRows from "./components/AddDeleteTableRows";
+import {useState} from "react";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const [selectedFile, setSelectedFile] = useState();
+    const [isFileSelected, setIsSelected] = useState(false);
+
+    const changeHandler = (event) => {
+        setSelectedFile(event.target.files[0]);
+        setIsSelected(true);
+    };
+
+    return (
+        <div>
+            <h2>Magic Rules Workbench</h2>
+            <input type="file" name="file" onChange={changeHandler}/>
+            <AddDeleteTableRows code={selectedFile}/>
+        </div>
+    );
 }
 
 export default App;
