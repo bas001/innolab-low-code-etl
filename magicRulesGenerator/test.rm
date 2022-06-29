@@ -1,0 +1,24 @@
+name: Fullname
+action: concat
+attributes: first : String, last: String -> name : String
+options: " "
+
+name: Adresse
+action: concat
+attributes: haus : String, nummer: String, plz:String -> name : String
+options: ( delimiter: ',')
+
+name: Name
+action: concat
+attributes: vorname : String, nachname: String -> name : String
+options: " "
+
+name: GroupBy
+action: group by
+attributes: testArray : String-> name : String
+options: " "
+
+name: summation
+action: summation
+attributes: summationInput : String-> summationOutput : String
+options: 
