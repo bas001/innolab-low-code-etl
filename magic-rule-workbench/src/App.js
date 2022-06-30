@@ -1,6 +1,7 @@
 import logo from './hat.png';
 import TestEditor from "./components/TestEditor";
 import {useState} from "react";
+import TestCase from "./model";
 
 
 function App() {
@@ -10,12 +11,16 @@ function App() {
     const changeHandler = async (event) => {
         const content = await event.target.files[0].text();
 
-        var a = content.split('// magic-rule ¯\\_(ツ)_/¯')
-        var funcs = a.map(x => {
-            return {name: x.substring(0, x.indexOf('=')).replaceAll("const", "").trim(), funcAsString: x.replaceAll("\\n", "")}
+        const funArray = content.split('// magic-rule ¯\\_(ツ)_/¯');
+        const functions = funArray.map(fun => {
+            const start = fun.indexOf("metainformation-start") + "metainformation-start".length
+            const end = fun.indexOf("metainformation-end")
+            const metaString = fun.substring(start, end)
+            const meta = JSON.parse(metaString);
+            return new TestCase(meta.name, meta.inputs, meta.output, fun);
         })
 
-        setFunctions(funcs)
+        setFunctions(functions)
     };
 
     return (

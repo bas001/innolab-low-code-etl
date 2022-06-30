@@ -2,21 +2,12 @@ import TableRows from "./TableRows"
 import {useState} from "react";
 import TestRunner from "./TestRunner";
 
-function AddDeleteTableRows(props) {
+function AddDeleteTableRows({testCase}) {
 
     const [rowsData, setRowsData] = useState([]);
 
     const addTableRows = () => {
-
-        const rowsInput = {
-            input1: '',
-            input2: '',
-            input3: '',
-            input4: '',
-            expectedOutput: ''
-        }
-        setRowsData([...rowsData, rowsInput])
-
+        setRowsData([...rowsData, {}])
     }
 
     const deleteTableRows = (index) => {
@@ -42,23 +33,20 @@ function AddDeleteTableRows(props) {
 
     return (
         <div className="container">
-            <h3>{props.name} Testsuite</h3>
+            <h3>{testCase.name} Testsuite</h3>
             <div className="row">
 
                 <table className="table">
                     <thead>
                     <tr>
-                        <th>Input 1</th>
-                        <th>Input 2</th>
-                        <th>Input 3</th>
-                        <th>Input 4</th>
+                        {testCase.inputs.map(input => (<th>{input.name}</th>))}
                         <th>Expected Output</th>
                         <th>Actual Output</th>
                     </tr>
                     </thead>
                     <tbody>
 
-                    <TableRows rowsData={rowsData} deleteTableRows={deleteTableRows} handleChange={handleChange}/>
+                    <TableRows rowsData={rowsData} header={testCase.inputs} deleteTableRows={deleteTableRows} handleChange={handleChange}/>
 
                     </tbody>
                 </table>
@@ -68,7 +56,8 @@ function AddDeleteTableRows(props) {
             <div className="col-sm-4">
                 <button className="btn btn-outline-success" onClick={addTableRows}>+</button>
             </div>
-            <TestRunner funcAsString={props.funcAsString} tests={rowsData} name={props.name} setTestResult={setTestResult}/>
+            <TestRunner testCase={testCase} inOutData={rowsData}
+                        setTestResult={setTestResult}/>
         </div>
     )
 

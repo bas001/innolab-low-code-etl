@@ -1,4 +1,4 @@
-function TableRows({rowsData, deleteTableRows, handleChange}) {
+function TableRows({rowsData, header, deleteTableRows, handleChange}) {
 
 
     function cssColor(status) {
@@ -21,18 +21,11 @@ function TableRows({rowsData, deleteTableRows, handleChange}) {
     return (
 
         rowsData.map((data, index) => {
-            const {input1, input2, input3, input4, expectedOutput, actualOutput, status} = data;
+            const {expectedOutput, actualOutput, status} = data;
             return (
-
                 <tr key={index}>
-                    <td><textarea value={input1} onChange={(evnt) => (handleChange(index, evnt))} name="input1"
-                                  className="form-control" style={getTextareaStyle()}/></td>
-                    <td><textarea value={input2} onChange={(evnt) => (handleChange(index, evnt))} name="input2"
-                                  className="form-control" style={getTextareaStyle()}/></td>
-                    <td><textarea value={input3} onChange={(evnt) => (handleChange(index, evnt))} name="input3"
-                                  className="form-control" style={getTextareaStyle()}/></td>
-                    <td><textarea value={input4} onChange={(evnt) => (handleChange(index, evnt))} name="input4"
-                                  className="form-control" style={getTextareaStyle()}/></td>
+                    {header.map(h => h.name).map(h => (<td><textarea value={data[h]} onChange={(evnt) => (handleChange(index, evnt))} name={h}
+                                                    className="form-control" style={getTextareaStyle()}/></td>))}
                     <td><textarea value={expectedOutput} onChange={(evnt) => (handleChange(index, evnt))} name="expectedOutput"
                                   className="form-control" style={getTextareaStyle()}/></td>
                     <td><textarea value={actualOutput} onChange={(evnt) => (handleChange(index, evnt))} name="actualOutput"
