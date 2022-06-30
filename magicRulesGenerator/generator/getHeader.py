@@ -10,7 +10,7 @@ def getHeader(rule:Rule):
     {{
     "name": "{rule.name}",
     "inputs": [{ ",".join(list(map(lambda x: x.toString(), getInputParams(rule.attributes))))}],
-    "output": [{ ",".join(list(map(lambda x: x.toString(), getOutputParams(rule.attributes))))}]
+    "outputs": [{ ",".join(list(map(lambda x: x.toString(), getOutputParams(rule.attributes))))}]
     }}
     metainformation-end
     */
