@@ -1,9 +1,8 @@
 import TableRows from "./TableRows"
 import {useState} from "react";
-import Runner from "./Runner";
+import TestRunner from "./TestRunner";
 
 function AddDeleteTableRows(props) {
-
 
     const [rowsData, setRowsData] = useState([]);
 
@@ -43,6 +42,7 @@ function AddDeleteTableRows(props) {
 
     return (
         <div className="container">
+            <h3>{props.name} Testsuite</h3>
             <div className="row">
 
                 <table className="table">
@@ -68,7 +68,7 @@ function AddDeleteTableRows(props) {
             <div className="col-sm-4">
                 <button className="btn btn-outline-success" onClick={addTableRows}>+</button>
             </div>
-            <Runner code={props.code} tests={rowsData} setTestResult={setTestResult}/>
+            <TestRunner funcAsString={props.funcAsString} tests={rowsData} name={props.name} setTestResult={setTestResult}/>
         </div>
     )
 

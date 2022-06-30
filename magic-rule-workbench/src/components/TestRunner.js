@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 
 
-function Runner(props) {
+function TestRunner(props) {
 
     function parse(input) {
         let number = parseInt(input);
@@ -29,11 +29,10 @@ function Runner(props) {
         }
     }
 
-    async function loadScript(file, test) {
-        var exec = await file.text();
-        let func = new Function("in1", "in2", "in3", "in4", exec + "return " + file.name.replace(".js", "") + "(in1, in2, in3, in4)");
+    function testFunction(funcAsString, test, name) {
+        let callableFunc = new Function("in1", "in2", "in3", "in4", funcAsString + "return " + name + "(in1, in2, in3, in4)");
         try {
-            let out = func.apply(null, [parse(test.input1), parse(test.input2), parse(test.input3), parse(test.input4)]);
+            let out = callableFunc.apply(null, [parse(test.input1), parse(test.input2), parse(test.input3), parse(test.input4)]);
             if (_.isEqual(out, parse(test.expectedOutput))) {
                 return {status: 'green', actualOutput: stringify(out)}
             } else {
@@ -46,10 +45,9 @@ function Runner(props) {
     }
 
     function run() {
-
-        let changedTests = props.tests;
-        changedTests.forEach(async function (test, i) {
-            let result = await loadScript(props.code, test);
+        let tests = props.tests;
+        tests.forEach(async function (test, i) {
+            let result = await testFunction(props.funcAsString, test, props.name);
             props.setTestResult(i, result)
         })
     }
@@ -64,4 +62,4 @@ function Runner(props) {
     );
 }
 
-export default Runner;
+export default TestRunner;
