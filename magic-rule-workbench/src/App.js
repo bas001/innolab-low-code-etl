@@ -1,5 +1,6 @@
 import AddDeleteTableRows from "./components/AddDeleteTableRows";
 import {useState} from "react";
+import logo from './hat.png';
 
 
 function App() {
@@ -14,8 +15,18 @@ function App() {
 
     return (
         <div>
-            <h2>Magic Rules Workbench</h2>
-            <input type="file" name="file" onChange={changeHandler}/>
+            <nav className="navbar navbar-light bg-light">
+                <a className="navbar-brand" href="#">
+                    <img src={logo} width="60" height="70" className="d-inline-block align-top" alt="">
+                        </img>
+                    <h2 className="d-inline-block">Magic Rules Workbench</h2>
+                </a>
+            </nav>
+            <br/>
+            <div className="container">
+                <input className="btn btn-outline-success"  type="file" name="file" onChange={changeHandler}/>
+            </div>
+            <br/>
             <AddDeleteTableRows code={selectedFile}/>
         </div>
     );
