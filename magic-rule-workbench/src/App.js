@@ -29,7 +29,7 @@ function App() {
                 <a className="navbar-brand" href="#" style={{display: "-webkit-flex"}}>
                     <img src={logo} width="150" height="200" className="d-inline-block align-top" alt="">
                     </img>
-                    <h2 style={{"display": "-webkit-flex", "align-items": "center", "margin-left": "20px"}}>Magic Rules Workbench</h2>
+                    <h2 style={{"display": "-webkit-flex", "alignItems": "center", "marginLeft": "20px"}}>Magic Rules Workbench</h2>
                 </a>
             </nav>
             <br/>

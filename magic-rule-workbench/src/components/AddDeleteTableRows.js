@@ -1,10 +1,15 @@
 import TableRows from "./TableRows"
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import TestRunner from "./TestRunner";
+import Cookies from 'universal-cookie';
 
 function AddDeleteTableRows({testCase}) {
 
     const [rowsData, setRowsData] = useState([]);
+
+    useEffect(() => {
+        setRowsData(new Cookies().get('testdata'));
+    }, [])
 
     const addTableRows = () => {
         setRowsData([...rowsData, {}])
@@ -22,9 +27,9 @@ function AddDeleteTableRows({testCase}) {
         const rowsInput = [...rowsData];
         rowsInput[index][name] = value;
         setRowsData(rowsInput);
-
-
+        new Cookies().set('testdata', rowsInput);
     }
+
     let setTestResult = (index, result) => {
         rowsData[index].status = result.status;
         rowsData[index].actualOutput = result.actualOutput;

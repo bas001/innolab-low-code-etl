@@ -25,10 +25,10 @@ function TableRows({rowsData, header, deleteTableRows, handleChange}) {
             return (
                 <tr key={index}>
                     {header.map(h => h.name).map(h => (<td><textarea value={data[h]} onChange={(evnt) => (handleChange(index, evnt))} name={h}
-                                                    className="form-control" style={getTextareaStyle()}/></td>))}
-                    <td><textarea value={expectedOutput} onChange={(evnt) => (handleChange(index, evnt))} name="expectedOutput"
+                                                   key={h} className="form-control" style={getTextareaStyle()}/></td>))}
+                    <td><textarea value={expectedOutput} onChange={(evnt) => (handleChange(index, evnt))} name="expectedOutput" key="expectedOutput"
                                   className="form-control" style={getTextareaStyle()}/></td>
-                    <td><textarea value={actualOutput} onChange={(evnt) => (handleChange(index, evnt))} name="actualOutput"
+                    <td><textarea value={actualOutput} onChange={(evnt) => (handleChange(index, evnt))} name="actualOutput" key="actualOutput"
                                   disabled={true} style={{backgroundColor: cssColor(status), ...getTextareaStyle()}} className="form-control"/></td>
                     <td>
                         <button className="btn btn-outline-danger" onClick={() => (deleteTableRows(index))}>x</button>

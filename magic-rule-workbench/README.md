@@ -1,6 +1,9 @@
-# Getting Started with Create React App
+# Magic Rules Workbench
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Browseranwendung um Javascript-Funktionen zu testen.
+
+Läuft aktuell nur im Firefox oder Chrome im unsecure Mode, da Javascripts über der Browser hochgeladen werden müssen.
+Das ist natürlich eine kleine Sicherheitslücke und wird daher vom Chrome blockiert.
 
 ## Available Scripts
 
