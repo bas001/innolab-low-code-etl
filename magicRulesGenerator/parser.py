@@ -7,6 +7,7 @@ from errorHandler import throwError
 from generator import createGroupBy
 from generator import createSummation
 from generator import createConcat
+from generator import createSplitting
 
 
 def parseName(nameLine) :
@@ -22,6 +23,8 @@ def parseAction(actionLine):
         return Actions.GROUP_BY
     elif rule == 'summation':
         return Actions.SUMMATION
+    elif rule == 'splitting':
+        return Actions.SPLITTING
     else:
         throwError("Action type '" + rule + "' is unknown!")
 
@@ -50,8 +53,6 @@ def parseRule(ruleLine):
 
 def parseOptions(optionLine):
     return optionLine.split('options:')[1].strip()
-
-
 
 
 Lines = fileHelper.readLines("test.rm")
@@ -96,6 +97,8 @@ def createFunction(rule:Rule):
         return createGroupBy(rule)
     elif rule.action == Actions.SUMMATION:
         return createSummation(rule)
+    elif rule.action == Actions.SPLITTING:
+        return createSplitting(rule)
 
 
 result=[]

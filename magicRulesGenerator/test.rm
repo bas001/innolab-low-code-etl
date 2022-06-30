@@ -22,3 +22,8 @@ name: summation
 action: summation
 attributes: summationInput : String-> summationOutput : String
 options: 
+
+name: SplitAdress
+action: splitting
+attributes: address : String -> housenumber : String, street : String
+options: ( delimiter: ' ')

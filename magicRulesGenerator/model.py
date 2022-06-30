@@ -4,6 +4,7 @@ class Actions:
     GROUP_BY    = 2
     IF_ELSE     = 3
     SUMMATION   = 4
+    SPLITTING   = 5
 
 class Parameter:
     def __init__(self, paramName, paramType, output:bool):
