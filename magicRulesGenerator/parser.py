@@ -102,4 +102,4 @@ result=[]
 for rule in rules:
     result.append(createFunction(rule))
 
-fileHelper.writeFile("test",  "\n".join(result))
+fileHelper.writeFile("test",  "\n// magic-rule ¯\\_(ツ)_/¯".join(result))
