@@ -5,7 +5,7 @@ function TestRunner({functions}) {
     return functions.map(fun => {
         return (
             <div>
-                <AddDeleteTableRows funcAsString={fun.funcAsString} name={fun.name}/>
+                <AddDeleteTableRows testCase={fun}/>
                 <br/>
                 <br/>
             </div>

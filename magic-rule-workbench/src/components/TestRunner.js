@@ -29,11 +29,12 @@ function TestRunner(props) {
         }
     }
 
-    function testFunction(funcAsString, test, name) {
-        let callableFunc = new Function("in1", "in2", "in3", "in4", funcAsString + "return " + name + "(in1, in2, in3, in4)");
+    function testFunction(testCase, inOut) {
+        let inputNames = testCase.inputs.map(input => input.name);
+        let callableFunc = new Function(inputNames, testCase.funcAsString + "return " + testCase.name + `(${inputNames})`);
         try {
-            let out = callableFunc.apply(null, [parse(test.input1), parse(test.input2), parse(test.input3), parse(test.input4)]);
-            if (_.isEqual(out, parse(test.expectedOutput))) {
+            let out = callableFunc.apply(null, inputNames.map(name => parse(inOut[name])));
+            if (_.isEqual(out, parse(inOut.expectedOutput))) {
                 return {status: 'green', actualOutput: stringify(out)}
             } else {
                 return {status: 'yellow', actualOutput: stringify(out)}
@@ -45,9 +46,8 @@ function TestRunner(props) {
     }
 
     function run() {
-        let tests = props.tests;
-        tests.forEach(async function (test, i) {
-            let result = await testFunction(props.funcAsString, test, props.name);
+        props.inOutData.forEach(async function (inOut, i) {
+            let result = await testFunction(props.testCase, inOut);
             props.setTestResult(i, result)
         })
     }
