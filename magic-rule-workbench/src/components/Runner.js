@@ -56,7 +56,7 @@ function Runner(props) {
 
     return (
         <div>
-            <br></br>
+            <br/>
             <button className="btn-outline-success" style={{"width": "200px", "height": "50px"}} onClick={run}>
                 Run Tests
             </button>

@@ -44,31 +44,29 @@ function AddDeleteTableRows(props) {
     return (
         <div className="container">
             <div className="row">
-                <div className="col-sm-8">
 
-                    <table className="table">
-                        <thead>
-                        <tr>
-                            <th>Input 1</th>
-                            <th>Input 2</th>
-                            <th>Input 3</th>
-                            <th>Input 4</th>
-                            <th>Expected Output</th>
-                            <th>Actual Output</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                <table className="table">
+                    <thead>
+                    <tr>
+                        <th>Input 1</th>
+                        <th>Input 2</th>
+                        <th>Input 3</th>
+                        <th>Input 4</th>
+                        <th>Expected Output</th>
+                        <th>Actual Output</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-                        <TableRows rowsData={rowsData} deleteTableRows={deleteTableRows} handleChange={handleChange}/>
+                    <TableRows rowsData={rowsData} deleteTableRows={deleteTableRows} handleChange={handleChange}/>
 
-                        </tbody>
-                    </table>
-                    <button className="btn btn-outline-success" onClick={addTableRows}>+</button>
+                    </tbody>
+                </table>
 
-                </div>
-                <div className="col-sm-4">
+            </div>
 
-                </div>
+            <div className="col-sm-4">
+                <button className="btn btn-outline-success" onClick={addTableRows}>+</button>
             </div>
             <Runner code={props.code} tests={rowsData} setTestResult={setTestResult}/>
         </div>
