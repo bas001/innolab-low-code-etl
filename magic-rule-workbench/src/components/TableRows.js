@@ -20,7 +20,7 @@ function TableRows({rowsData, header, deleteTableRows, handleChange}) {
 
     return (
 
-        rowsData.map((data, index) => {
+        rowsData?.map((data, index) => {
             const {expectedOutput, actualOutput, status} = data;
             return (
                 <tr key={index}>

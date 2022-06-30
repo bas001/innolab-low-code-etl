@@ -1,16 +1,41 @@
-import AddDeleteTableRows from "./AddDeleteTableRows";
+import TestCase from "./TestCase";
+import {useState} from "react";
 
 function TestRunner({functions}) {
 
-    return functions.map(fun => {
-        return (
-            <div>
-                <AddDeleteTableRows key={fun.name} testCase={fun}/>
-                <br/>
-                <br/>
+    const [result, setResult] = useState({});
+    const [resultRender, setResultRender] = useState({});
+    const reportResult = (report) => {
+        result[report.name] = report.result
+        const resultArr = Object.entries(result).map(([key, value]) => value.join())
+
+        var countOfResult = resultArr.reduce((p, c) => {
+            var name = c;
+            if (!p.hasOwnProperty(name)) {
+                p[name] = 0;
+            }
+            p[name]++;
+            return p;
+        }, {});
+        setResultRender(countOfResult)
+    };
+
+    return (
+        <div>
+            <div className="container" align="right">
+            <h2>Result</h2>
+                {Object.entries(resultRender).map(([key, value]) => <div><span>{key}: {value}</span></div>)}
             </div>
-        )
-    });
+            {functions.map(fun => {
+                return (
+                    <div>
+                        <TestCase testCase={fun} reportResult={reportResult}/>
+                        <br/>
+                        <br/>
+                    </div>
+                )
+            })}
+        </div>);
 
 }
 

@@ -3,12 +3,15 @@ import {useEffect, useState} from "react";
 import TestRunner from "./TestRunner";
 import Cookies from 'universal-cookie';
 
-function AddDeleteTableRows({testCase}) {
+function TestCase({testCase, reportResult}) {
 
     const [rowsData, setRowsData] = useState([]);
 
     useEffect(() => {
-        setRowsData(new Cookies().get('testdata'));
+        let testdata = new Cookies().get('testdata');
+        if (testdata) {
+            setRowsData(testdata);
+        }
     }, [])
 
     const addTableRows = () => {
@@ -33,6 +36,7 @@ function AddDeleteTableRows({testCase}) {
     let setTestResult = (index, result) => {
         rowsData[index].status = result.status;
         rowsData[index].actualOutput = result.actualOutput;
+        reportResult({"name": testCase.name, "result": rowsData.map(row => row.status)})
         setRowsData([...rowsData]);
     };
 
@@ -44,7 +48,7 @@ function AddDeleteTableRows({testCase}) {
                 <table className="table">
                     <thead>
                     <tr>
-                        {testCase.inputs.map(input => (<th>{input.name}</th>))}
+                        {testCase.inputs.map(input => (<th>{input.name}: {input.type}</th>))}
                         <th>Expected Output</th>
                         <th>Actual Output</th>
                     </tr>
@@ -61,11 +65,10 @@ function AddDeleteTableRows({testCase}) {
             <div className="col-sm-4">
                 <button className="btn btn-outline-success" onClick={addTableRows}>+</button>
             </div>
-            <TestRunner testCase={testCase} inOutData={rowsData}
-                        setTestResult={setTestResult}/>
+            <TestRunner testCase={testCase} inOutData={rowsData} setTestResult={setTestResult}/>
         </div>
     )
 
 }
 
-export default AddDeleteTableRows
+export default TestCase
