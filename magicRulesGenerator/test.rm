@@ -5,7 +5,7 @@ options: " "
 
 name: Adresse
 action: concat
-attributes: haus : String, nummer: String, plz:String -> name : String
+attributes: haus : String, nummer: String, plz:String -> address : String
 options: ( delimiter: ',')
 
 name: Name
@@ -15,15 +15,21 @@ options: " "
 
 name: GroupBy
 action: group-by
-attributes: testArray : String-> name : String
+attributes: testArray : Array -> testOutput : Object
 options: " "
 
 name: summation
 action: summation
-attributes: summationInput : String-> summationOutput : String
+attributes: summationInput : Array -> summationOutput : Number
 options: 
 
 name: SplitAdress
 action: splitting
-attributes: address : String -> housenumber : String, street : String
+attributes: address : String -> housenumber : Number, street : String
 options: ( delimiter: ' ')
+
+name: IfElseTest
+action: if-else
+attributes: sex : String -> gender : String
+rule: (sex === 'Male' -> 'M', sex === 'Female' -> 'F', sex === 'Divers' -> 'D')
+options: ( no-match : 'Unknown' )

@@ -1,33 +1,35 @@
 
-import fileHelper 
+import utils.fileHelper as fileHelper
 from model import Rule
 from model import Parameter
 from model import Actions
-from errorHandler import throwError
-from generator import createGroupBy
-from generator import createSummation
-from generator import createConcat
-from generator import createSplitting
-from generator import getHeader
+from model import IfElseRule
+from utils.errorHandler import throwError
+from generator.createGroupBy import createGroupBy
+from generator.createSummation import createSummation
+from generator.createConcat import createConcat
+from generator.createSplitting import createSplitting
+from generator.createIfElse import createIfElse
+from generator.getHeader import getHeader
 
 
 def parseName(nameLine) :
     return nameLine.split('name:')[1].strip()
 
 def parseAction(actionLine):
-    rule = actionLine.split('action:')[1].strip()
-    if rule == 'concat':
+    action = actionLine.split('action:')[1].strip()
+    if action == 'concat':
         return Actions.CONCAT
-    elif rule == 'if-else':
+    elif action == 'if-else':
         return Actions.IF_ELSE
-    elif rule == 'group-by':
+    elif action == 'group-by':
         return Actions.GROUP_BY
-    elif rule == 'summation':
+    elif action == 'summation':
         return Actions.SUMMATION
-    elif rule == 'splitting':
+    elif action == 'splitting':
         return Actions.SPLITTING
     else:
-        throwError("Action type '" + rule + "' is unknown!")
+        throwError("Action type '" + action + "' is unknown!")
 
 def stripStrings(arr):
     return [item.strip() for item in arr]
@@ -45,12 +47,21 @@ def extractParams(str):
        
     return extractedParams
 
+def extractIfElseRule(ruleString):
+    extractedIfElseRules = []
+    for r in stripStrings(ruleString.lstrip('(').rstrip(')').split(',')):
+        ruleEntries = stripStrings(r.split('->'))
+        extractedIfElseRules.append(IfElseRule(ruleEntries[0], ruleEntries[1].strip('"')))
+    return extractedIfElseRules
+
 def parseAttributes(attributesLine):
     return extractParams(attributesLine.split('attributes:')[1].strip())
 
-
-def parseRule(ruleLine):
-    return ruleLine.split('rule:')[1].strip()
+def parseRule(ruleLine, action):
+    ruleString = ruleLine.split('rule:')[1].strip()
+    if action != Actions.IF_ELSE:
+        return ruleString
+    return extractIfElseRule(ruleString)
 
 def parseOptions(optionLine):
     return optionLine.split('options:')[1].strip()
@@ -81,7 +92,7 @@ for line in Lines:
         attributes = parseAttributes(line)
     elif line.startswith('rule:'):
         lastKeyword='rule'
-        rule = parseRule(line)
+        rule = parseRule(line, action)
     elif line.startswith('options:'):
         lastKeyword='options'
         options = parseOptions(line)
@@ -100,7 +111,9 @@ def createFunction(rule:Rule):
     elif rule.action == Actions.SUMMATION:
         result+= createSummation(rule)
     elif rule.action == Actions.SPLITTING:
-        result+= createSplitting(rule)        
+        result+= createSplitting(rule)
+    elif rule.action == Actions.IF_ELSE:
+        result+= createIfElse(rule)     
     return result
 
 result=[]

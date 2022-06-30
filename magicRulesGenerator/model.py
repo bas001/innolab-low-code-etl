@@ -16,7 +16,7 @@ class Parameter:
         return f'''{{"type": "{self.paramType}", "name": "{self.paramName}"}}'''
 
 class Rule:
-    def __init__(self, name, action, attributes: [Parameter], rule, options):
+    def __init__(self, name, action: [Actions], attributes: [Parameter], rule, options):
         self.name = name
         self.action = action
         self.attributes = attributes
@@ -25,3 +25,8 @@ class Rule:
     
     def toString(self):
         return self.name + ' ' + str(self.action) + ' ' + str(self.attributes) + ' ' + self.options + ' ' 
+
+class IfElseRule:
+    def __init__(self, condition, returnValue):
+        self.condition = condition
+        self.returnValue = returnValue
