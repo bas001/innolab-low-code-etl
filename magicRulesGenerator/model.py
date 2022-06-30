@@ -12,6 +12,9 @@ class Parameter:
         self.paramType = paramType
         self.output = output
 
+    def toString(self):
+        return '''[{{"type": "{self.type}", "name": "{self.name}"}}]'''
+
 class Rule:
     def __init__(self, name, action, attributes: [Parameter], rule, options):
         self.name = name

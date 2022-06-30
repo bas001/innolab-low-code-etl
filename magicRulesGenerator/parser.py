@@ -8,6 +8,7 @@ from generator import createGroupBy
 from generator import createSummation
 from generator import createConcat
 from generator import createSplitting
+from generator import getHeader
 
 
 def parseName(nameLine) :
@@ -91,14 +92,23 @@ for line in Lines:
 rules.append(Rule(name,action,attributes,rule, options))
 
 def createFunction(rule:Rule):
+    result= getHeader(rule)
     if rule.action == Actions.CONCAT:
-        return createConcat(rule)
+        result+= createConcat(rule)
     elif rule.action == Actions.GROUP_BY:
-        return createGroupBy(rule)
+        result+= createGroupBy(rule)
     elif rule.action == Actions.SUMMATION:
+<<<<<<< HEAD
         return createSummation(rule)
     elif rule.action == Actions.SPLITTING:
         return createSplitting(rule)
+=======
+        result+= createSummation(rule)
+        
+    return result
+
+
+>>>>>>> stash
 
 
 result=[]
