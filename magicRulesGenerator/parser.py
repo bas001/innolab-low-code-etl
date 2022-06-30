@@ -98,18 +98,10 @@ def createFunction(rule:Rule):
     elif rule.action == Actions.GROUP_BY:
         result+= createGroupBy(rule)
     elif rule.action == Actions.SUMMATION:
-<<<<<<< HEAD
-        return createSummation(rule)
-    elif rule.action == Actions.SPLITTING:
-        return createSplitting(rule)
-=======
         result+= createSummation(rule)
-        
+    elif rule.action == Actions.SPLITTING:
+        result+= createSplitting(rule)        
     return result
-
-
->>>>>>> stash
-
 
 result=[]
 for rule in rules:

@@ -13,7 +13,7 @@ class Parameter:
         self.output = output
 
     def toString(self):
-        return '''[{{"type": "{self.type}", "name": "{self.name}"}}]'''
+        return f'''{{"type": "{self.paramType}", "name": "{self.paramName}"}}'''
 
 class Rule:
     def __init__(self, name, action, attributes: [Parameter], rule, options):

@@ -1,29 +1,17 @@
 from errorHandler import throwError
 from model import Rule
 from model import Parameter
-
-def getInputParams(params:[Parameter]):
-    return list(map(lambda x: x.paramName, filter(lambda param :  not param.output, params)))
-
-def getOutputParams(params:[Parameter]):
-    return list(map(lambda x: x.paramName, filter(lambda param :  param.output, params)))
-
-def paramsToString(params:[Parameter]):
-    return ', '.join(params)
-
-def concatParams(params:[Parameter], delimiter):
-    concatString = " + " + delimiter + " + "
-    return concatString.join(params)
-
-def extractDelimiter(optionString):
-    if 'delimiter' in optionString:
-        return optionString[optionString.index("'"):optionString.rindex("'")+1]
-    else:
-        return "' '"
+from helper import getInputParams
+from helper import getOutputParams
+from helper import getInputParamsName
+from helper import getOutputParamsName
+from helper import extractDelimiter
+from helper import concatParams
+from helper import paramsToString
 
 def createSummation(rule:Rule):
-    inputParams = getInputParams(rule.attributes)
-    outputParams = getOutputParams(rule.attributes)
+    inputParams = getInputParamsName(rule.attributes)
+    outputParams = getOutputParamsName(rule.attributes)
     if len(inputParams) > 1:
         throwError("Action 'summation' accecpt just one input param.")
     if len(outputParams) > 1:
@@ -38,8 +26,8 @@ def createSummation(rule:Rule):
     '''
 
 def createGroupBy(rule:Rule) :
-    inputParams = getInputParams(rule.attributes)
-    outputParams = getOutputParams(rule.attributes)
+    inputParams = getInputParamsName(rule.attributes)
+    outputParams = getOutputParamsName(rule.attributes)
     if len(inputParams) > 1:
         throwError("Action 'Group by' accecpt just one input param.")
     if len(outputParams) > 1:
@@ -54,8 +42,8 @@ def createGroupBy(rule:Rule) :
 
 def createConcat(rule:Rule):
     delimiter="' '"
-    inputParams = getInputParams(rule.attributes)
-    outputParams = getOutputParams(rule.attributes)
+    inputParams = getInputParamsName(rule.attributes)
+    outputParams = getOutputParamsName(rule.attributes)
 
     outputParam = outputParams[0]
     delimiter= extractDelimiter(rule.options)
@@ -68,8 +56,8 @@ def createConcat(rule:Rule):
 
 def createSplitting(rule:Rule):
     delimiter= extractDelimiter(rule.options)
-    inputParams = getInputParams(rule.attributes)
-    outputParams = getOutputParams(rule.attributes)
+    inputParams = getInputParamsName(rule.attributes)
+    outputParams = getOutputParamsName(rule.attributes)
 
     if len(inputParams) > 1:
         throwError("Action 'Splitting' accecpt just one input param.")
@@ -99,8 +87,8 @@ def getHeader(rule:Rule):
     metainformation-start
     {{
     "name": "{rule.name}",
-    "inputs": [{ list(map(lambda x: x.toString(), getInputParams(rule.attributes)))}],
-    "output": [{getOutputParams(rule.attributes)}]
+    "inputs": [{ ",".join(list(map(lambda x: x.toString(), getInputParams(rule.attributes))))}],
+    "output": [{ ",".join(list(map(lambda x: x.toString(), getOutputParams(rule.attributes))))}]
     }}
     metainformation-end
     */
