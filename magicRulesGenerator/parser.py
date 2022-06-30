@@ -18,12 +18,12 @@ def parseAction(actionLine):
         return Actions.CONCAT
     elif rule == 'if-else':
         return Actions.IF_ELSE
-    elif rule == 'group by':
+    elif rule == 'group-by':
         return Actions.GROUP_BY
     elif rule == 'summation':
         return Actions.SUMMATION
     else:
-        return Actions.UNKOWN
+        throwError("Action type '" + rule + "' is unknown!")
 
 def stripStrings(arr):
     return [item.strip() for item in arr]
@@ -91,15 +91,15 @@ rules.append(Rule(name,action,attributes,rule, options))
 
 def createFunction(rule:Rule):
     if rule.action == Actions.CONCAT:
-        fileHelper.writeFile(rule.name, createConcat(rule))
+        return createConcat(rule)
     elif rule.action == Actions.GROUP_BY:
-        fileHelper.writeFile(rule.name, createGroupBy(rule))
+        return createGroupBy(rule)
     elif rule.action == Actions.SUMMATION:
-        fileHelper.writeFile(rule.name, createSummation(rule))
+        return createSummation(rule)
 
 
-
+result=[]
 for rule in rules:
-    createFunction(rule)
+    result.append(createFunction(rule))
 
-
+fileHelper.writeFile("test",  "\n".join(result))

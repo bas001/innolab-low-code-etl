@@ -14,7 +14,7 @@ attributes: vorname : String, nachname: String -> name : String
 options: " "
 
 name: GroupBy
-action: group by
+action: group-by
 attributes: testArray : String-> name : String
 options: " "
 
