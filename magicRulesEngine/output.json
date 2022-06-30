@@ -1,0 +1,20 @@
+[
+  {
+    "sex": "C00000012 Male",
+    "gender": "M",
+    "housenumber": "275",
+    "street": "Fairground Drive",
+    "testOutput": [
+      {
+        "Banana": 2
+      },
+      {
+        "Apple": 3
+      },
+      {
+        "Cheeese": 3
+      }
+    ],
+    "summationOutput": 26
+  }
+]
