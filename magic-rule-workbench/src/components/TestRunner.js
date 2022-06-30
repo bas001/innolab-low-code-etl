@@ -4,7 +4,19 @@ import _ from 'lodash';
 
 function TestRunner(props) {
 
-    function parse(input) {
+    function parse(input, type) {
+
+        switch (type) {
+            case "Number":
+                return parseInt(input);
+            case "String":
+                return input;
+            case "Object":
+            case "Array":
+                return JSON.parse(input)
+            default:
+        }
+
         let number = parseInt(input);
         if (!isNaN(number)) {
             return number;
@@ -31,9 +43,9 @@ function TestRunner(props) {
 
     function testFunction(testCase, inOut) {
         let inputNames = testCase.inputs.map(input => input.name);
-        let callableFunc = new Function(inputNames, testCase.funcAsString + "return " + testCase.name + `(${inputNames})`);
+        let callableFunc = new Function(inputNames, testCase.funcAsString + ";return " + testCase.name + `(${inputNames})`);
         try {
-            let out = callableFunc.apply(null, inputNames.map(name => parse(inOut[name])));
+            let out = callableFunc.apply(null, testCase.inputs.map(input => parse(inOut[input.name], input.type)));
             if (_.isEqual(out, parse(inOut.expectedOutput))) {
                 return {status: 'green', actualOutput: stringify(out)}
             } else {
