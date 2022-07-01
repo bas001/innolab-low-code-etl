@@ -1,4 +1,3 @@
-from utils.errorHandler import throwError
 from model import Rule
 from utils.helper import getInputParamsName
 from utils.helper import getOutputParamsName
@@ -9,9 +8,6 @@ def createSplitting(rule:Rule):
     delimiter= extractDelimiter(rule.options)
     inputParams = getInputParamsName(rule.attributes)
     outputParams = getOutputParamsName(rule.attributes)
-
-    if len(inputParams) > 1:
-        throwError("Action 'Splitting' accecpt just one input param.")
 
     return f'''
     const {rule.name} = ({paramsToString(inputParams)}) => {{

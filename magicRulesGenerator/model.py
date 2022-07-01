@@ -1,10 +1,15 @@
 class Actions:
-    UNKOWN      = 0
-    CONCAT      = 1
-    GROUP_BY    = 2
-    IF_ELSE     = 3
-    SUMMATION   = 4
-    SPLITTING   = 5
+    CONCAT      = 'concat'
+    GROUP_BY    = 'group-by'
+    IF_ELSE     = 'if-else'
+    SUMMATION   = 'summation'
+    SPLITTING   = 'splitting'
+
+class ParameterTypes:
+    STRING      = 'String'
+    NUMBER      = 'Number'
+    ARRAY       = 'Array'
+    OBJECT      = 'Object'
 
 class Parameter:
     def __init__(self, paramName, paramType, output:bool):

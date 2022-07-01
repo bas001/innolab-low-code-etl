@@ -1,10 +1,12 @@
-
 import utils.fileHelper as fileHelper
 from model import Rule
 from model import Parameter
 from model import Actions
 from model import IfElseRule
+from model import ParameterTypes
 from utils.errorHandler import throwError
+from validator import validateParamType
+from validator import validateParamCount
 from generator.createGroupBy import createGroupBy
 from generator.createSummation import createSummation
 from generator.createConcat import createConcat
@@ -36,17 +38,30 @@ def parseAction(actionLine):
 def stripStrings(arr):
     return [item.strip() for item in arr]
 
-def extractParams(str):
+def parseParamType(paramType):
+    if paramType == 'String':
+        return ParameterTypes.STRING
+    elif paramType == 'Number':
+        return ParameterTypes.NUMBER
+    elif paramType == 'Array':
+        return ParameterTypes.ARRAY
+    elif paramType == 'Object':
+        return ParameterTypes.OBJECT
+    else:
+        throwError("Parameter type '" + paramType + "' is unkown!")
+
+def extractParams(str, action):
     rawParams =  stripStrings(str.split('->'))
     extractedParams = []
-
     for i in range(2):
         output = False if i == 0 else True
-
         for p in stripStrings(rawParams[i].split(',')):
-            pSplit = stripStrings(p.split(':'))
-            extractedParams.append(Parameter(pSplit[0], pSplit[1], output))
-       
+            paramName = stripStrings(p.split(':'))[0]
+            paramType = parseParamType(stripStrings(p.split(':'))[1])
+            extractedParam = Parameter(paramName, paramType, output)
+            validateParamType(extractedParam, action)
+            extractedParams.append(extractedParam)      
+    validateParamCount(extractedParams, action)
     return extractedParams
 
 def extractIfElseRule(ruleString):
@@ -56,8 +71,8 @@ def extractIfElseRule(ruleString):
         extractedIfElseRules.append(IfElseRule(ruleEntries[0], ruleEntries[1].strip('"')))
     return extractedIfElseRules
 
-def parseAttributes(attributesLine):
-    return extractParams(attributesLine.split('attributes:')[1].strip())
+def parseAttributes(attributesLine, action):
+    return extractParams(attributesLine.split('attributes:')[1].strip(), action)
 
 def parseRule(ruleLine, action):
     ruleString = ruleLine.split('rule:')[1].strip()
@@ -124,7 +139,7 @@ def generate(lines):
     for line in lines.splitlines():     
         if line.startswith('name:') : 
             if lastKeyword in ('attributes','rule', 'options'):
-                rules.append(Rule(name,action,attributes,rule, options))
+                rules.append(Rule(name, action, attributes, rule, options))
             elif lastKeyword not in (''):
                 throwError('File is not correct!')
             lastKeyword='name'
@@ -134,7 +149,7 @@ def generate(lines):
             action = parseAction(line)
         elif line.startswith('attributes:'):
             lastKeyword='attributes'
-            attributes = parseAttributes(line)
+            attributes = parseAttributes(line, action)
         elif line.startswith('rule:'):
             lastKeyword='rule'
             rule = parseRule(line, action)

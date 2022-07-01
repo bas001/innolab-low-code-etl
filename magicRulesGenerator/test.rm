@@ -25,7 +25,7 @@ options:
 
 name: SplitAdress
 action: splitting
-attributes: address : String -> housenumber : Number, street : String
+attributes: address : String -> housenumber : String, street : String
 options: ( delimiter: ' ')
 
 name: IfElseTest
