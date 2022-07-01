@@ -33,6 +33,12 @@ ALLOWED_ACTION_ATTRIBUTES = {
         'inputTypes' : [ParameterTypes.STRING, ParameterTypes.NUMBER, ParameterTypes.ARRAY, ParameterTypes.OBJECT], 
         'outputCount' : 1, 
         'outputTypes' : [ParameterTypes.STRING, ParameterTypes.NUMBER, ParameterTypes.ARRAY, ParameterTypes.OBJECT] 
+    },
+        Actions.CUSTOM : { 
+        'inputCount' : 100, 
+        'inputTypes' : [ParameterTypes.STRING, ParameterTypes.NUMBER, ParameterTypes.ARRAY, ParameterTypes.OBJECT], 
+        'outputCount' : 1, 
+        'outputTypes' : [ParameterTypes.STRING, ParameterTypes.NUMBER, ParameterTypes.ARRAY, ParameterTypes.OBJECT] 
     }
 }
 
