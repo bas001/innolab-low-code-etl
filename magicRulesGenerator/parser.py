@@ -83,17 +83,18 @@ def createFunction(rule:Rule):
     return result
 
 def main(argv):
-    usage = '''usage: parser.py [options] -f <rm-filename>
+    usage = '''usage: parser.py [options] -f <rm-filename> -o <output-filename>
 
     mandatory:
-        -f, --file    rm filename
+        -f, --rmFilename        rm filename
+        -o, --outputFilename    output filename
     '''
 
-    mandatory_params = dict.fromkeys(["string"])
+    mandatory_params = dict.fromkeys(["rmFilename", "outputFilename"])
     
 
     try:
-        opts,args = getopt.getopt(argv, "hf:",["help", "file"])
+        opts,args = getopt.getopt(argv, "hf:o:",["help", "rmFilename", "outputFilename"])
     except getopt.GetoptError as error:
         print(error)
         print(usage)
@@ -102,10 +103,13 @@ def main(argv):
         if opt in ("-h", "--help"):
             print(usage)
             sys.exit()
-        elif opt in ("-f", "--filename"):
-            mandatory_params["filename"] = arg 
+        elif opt in ("-f", "--rmFilename"):
+            mandatory_params["rmFilename"] = arg 
+        elif opt in ("-o", "--outputFilename"):
+            mandatory_params["outputFilename"] = arg 
 
-    generate(Path(mandatory_params["filename"]).read_text())
+    result = generate(Path(mandatory_params["rmFilename"]).read_text())
+    fileHelper.writeFile(str(mandatory_params["outputFilename"]),  result)
 
 
 def generate(lines):   
@@ -145,9 +149,9 @@ def generate(lines):
     result=[]
     for rule in rules:
         result.append(createFunction(rule))
-    fileHelper.writeFile("test",  "\n// magic-rule ¯\\_(ツ)_/¯".join(result))
 
-
+    return "\n// magic-rule ¯\\_(ツ)_/¯".join(result)
+    
 
 if __name__ == "__main__":
         main(sys.argv[1:])
