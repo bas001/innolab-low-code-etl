@@ -19,10 +19,14 @@ function RuleEditor({onSave}) {
             .then(data => onSave(data));
     }
 
+    function handleChange(event) {
+        setRules(event.target.value)
+    }
+
     return (
         <div className="container">
             <h2>Rule Editor</h2>
-            <textarea value={rules} name="ruleInput"
+            <textarea value={rules} name="ruleInput" onChange={handleChange}
                       key="ruleInput"
                       className="form-control" style={getTextareaStyle()}/>
             <br/>
