@@ -122,7 +122,8 @@ def main(argv):
             mandatory_params["rmFilename"] = arg 
         elif opt in ("-o", "--outputFilename"):
             mandatory_params["outputFilename"] = arg 
-
+  
+    
     result = generate(Path(mandatory_params["rmFilename"]).read_text())
     fileHelper.writeFile(str(mandatory_params["outputFilename"]),  result)
 

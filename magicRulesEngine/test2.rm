@@ -1,0 +1,25 @@
+name: Fullname
+action: concat
+attributes: client_id : String, sex: String -> sex : String
+options: " "
+
+name: GroupBy
+action: group-by
+attributes: testArray : Array -> testOutput : Object
+options: " "
+
+name: summation
+action: summation
+attributes: summationInput : Array -> summationOutput : Number
+options: 
+
+name: SplitAdress
+action: splitting
+attributes: address_1 : String -> housenumber : String, street : String
+options: ( delimiter: ' ')
+
+name: IfElseTest
+action: if-else
+attributes: sex : String -> gender : String
+rule: (sex === 'Male' -> 'M', sex === 'Female' -> 'F', sex === 'Divers' -> 'D')
+options: ( no-match : 'Unknown' )

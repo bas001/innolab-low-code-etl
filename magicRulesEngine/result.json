@@ -1,0 +1,38 @@
+[
+  {
+    "sex": "C00000012 Male",
+    "testOutput": [
+      {
+        "Banana": 2
+      },
+      {
+        "Apple": 3
+      },
+      {
+        "Cheeese": 3
+      }
+    ],
+    "summationOutput": 26,
+    "housenumber": "275",
+    "street": "Fairground Drive",
+    "gender": "M"
+  },
+  {
+    "sex": "C00000013 Female",
+    "testOutput": [
+      {
+        "Banana": 1
+      },
+      {
+        "Apple": 4
+      },
+      {
+        "Cheeese": 3
+      }
+    ],
+    "summationOutput": 5,
+    "housenumber": "1",
+    "street": "Bellevue Drive",
+    "gender": "F"
+  }
+]

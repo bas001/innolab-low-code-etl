@@ -25,6 +25,32 @@
             "testArray" : ["Banana", "Apple", "Banana", "Cheeese", "Cheeese", "Apple", "Cheeese", "Apple"],
             "client_hk" : "A63D5F6FAC0141FFBF4C3200B53EBE8E",
             "effectiv_timerange" : "[\"2021-02-10 18:52:04.91342+01\",)"
+        },
+        {
+            "client_id" : "C00000013",
+            "sex" : "Female",
+            "fulldate" : "2001-02-20",
+            "day" : 20,
+            "month" : 2,
+            "year" : 2001,
+            "age" : 18,
+            "social" : "771-44-3992",
+            "first" : "James",
+            "middle" : "Amauri",
+            "last" : "Clark",
+            "phone" : "431-869-3807",
+            "email" : "james.clark9@gmail.com",
+            "address_1" : "1 Bellevue Drive",
+            "address_2" : "",
+            "city" : "Fargo",
+            "state" : "ND",
+            "zipcode" : "42009",
+            "district_id" : 40,
+            "creation_date" : "2021-02-10",
+            "summationInput" : [1,1,1,1,1],
+            "testArray" : ["Banana", "Apple", "Apple", "Cheeese", "Cheeese", "Apple", "Cheeese", "Apple"],
+            "client_hk" : "A63D5F6FAC0141FFBF4C3200B53EBE8E",
+            "effectiv_timerange" : "[\"2021-02-10 18:52:04.91342+01\",)"
         }
     ]
 }

@@ -1,54 +1,31 @@
-tableName= 's_client'
-functionCall='Fullname'
-
-parameters=['sex', 'day', 'month', 'age']
-
-let jsonData = require('./input_small.json');
-
-function throwError(message) {
-    process.on('exit', function (){
-        console.error(message);
-        process.exit()
-      });
-}
-
-
-if(jsonData[tableName] == undefined){
-    throwError("Table name '" + tableName + "' not found")
-}
-
-if(jsonData[tableName].length == 0) {
-    throwError("Table name'" + tableName + "' is empty")
-}
-
-parameters.forEach(parameter => {
-    if(jsonData[tableName][0][parameter] == undefined){
-        throwError("Input parameter '" + parameter + "' not found in data!")
-    }
-});
-
-
+const { program } = require('commander');
 const fs = require('fs');
-let content = fs.readFileSync('./test.js', {encoding: 'utf8'});
+const helper = require('./helper.js')
 
 
-function getMeta(jsonString) {
-    const start = jsonString.indexOf("metainformation-start") + "metainformation-start".length
-    const end = jsonString.indexOf("metainformation-end")
-    const metaString = jsonString.substring(start, end)
-    return JSON.parse(metaString);
-}
+program
+  .requiredOption('-t, --table [string]', 'exported table')
+  .requiredOption('-f, --jsFile [js]', 'js file with functions')
+  .requiredOption('-i, --inputFile [json]', 'input json file')
+  .requiredOption('-o, --outputFile [json]', 'output json file');
 
-function getInputParamValues(data, inputNames) {
-    return inputNames.map(name => data[name])
-}
+program.parse(process.argv);
+const opts = program.opts()
+tableName = opts.table
 
+
+let content = fs.readFileSync('./' + opts.jsFile, {encoding: 'utf8'});
 const funArray = content.split('// magic-rule ¯\\_(ツ)_/¯');
+let jsonData = require('./' + opts.inputFile);
+
+
+helper.validateInput(jsonData[tableName], tableName, helper.getParameters(funArray))
+
 const result=[]
 for(let dataIndex = 0; dataIndex < jsonData[tableName].length; dataIndex++ ) {
     const test={}
     const functions = funArray.map(fun => {
-        meta = getMeta(fun)
+        meta = helper.getMeta(fun)
         
     
         inputNames= meta.inputs.map(input => input.name)
@@ -57,7 +34,7 @@ for(let dataIndex = 0; dataIndex < jsonData[tableName].length; dataIndex++ ) {
         let callableFunc = new Function(inputNames, fun + "return " + meta.name + `(${inputNames})`);
         data = jsonData[tableName][dataIndex]
        
-        const outputs = callableFunc.apply(null, getInputParamValues(data, inputNames))
+        const outputs = callableFunc.apply(null, helper.getInputParamValues(data, inputNames))
        
         for(let i = 0; i < outputs.length; i++) {
             outputName = outputNames[i]
@@ -69,7 +46,7 @@ for(let dataIndex = 0; dataIndex < jsonData[tableName].length; dataIndex++ ) {
 }
 
 
-fs.writeFileSync("output.json", JSON.stringify(result, null, 2))
+fs.writeFileSync(opts.outputFile, JSON.stringify(result, null, 2))
 
 
 
