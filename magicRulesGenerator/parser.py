@@ -11,7 +11,9 @@ from generator.createConcat import createConcat
 from generator.createSplitting import createSplitting
 from generator.createIfElse import createIfElse
 from generator.getHeader import getHeader
-
+import getopt
+import sys
+from pathlib import Path
 
 def parseName(nameLine) :
     return nameLine.split('name:')[1].strip()
@@ -66,42 +68,6 @@ def parseRule(ruleLine, action):
 def parseOptions(optionLine):
     return optionLine.split('options:')[1].strip()
 
-
-Lines = fileHelper.readLines("test.rm")
-
-lastKeyword = ''
-name=''
-action=''
-attributes=''
-rule=''
-options=''
-rules=[]
-for line in Lines:
-    if line.startswith('name:') : 
-        if lastKeyword in ('attributes','rule', 'options'):
-            rules.append(Rule(name,action,attributes,rule, options))
-        elif lastKeyword not in (''):
-            throwError('File is not correct!')
-        lastKeyword='name'
-        name = parseName(line)
-    elif line.startswith('action:'):
-        lastKeyword='action'
-        action = parseAction(line)
-    elif line.startswith('attributes:'):
-        lastKeyword='attributes'
-        attributes = parseAttributes(line)
-    elif line.startswith('rule:'):
-        lastKeyword='rule'
-        rule = parseRule(line, action)
-    elif line.startswith('options:'):
-        lastKeyword='options'
-        options = parseOptions(line)
-    else:
-        if line not in ('\n', ' '):
-            print('Only the following keywords are allowed: name, action, attributes, rule, options. However, another word is used in the line:' + line)
-
-rules.append(Rule(name,action,attributes,rule, options))
-
 def createFunction(rule:Rule):
     result= getHeader(rule)
     if rule.action == Actions.CONCAT:
@@ -116,8 +82,72 @@ def createFunction(rule:Rule):
         result+= createIfElse(rule)     
     return result
 
-result=[]
-for rule in rules:
-    result.append(createFunction(rule))
+def main(argv):
+    usage = '''usage: parser.py [options] -f <rm-filename>
 
-fileHelper.writeFile("test",  "\n// magic-rule ¯\\_(ツ)_/¯".join(result))
+    mandatory:
+        -f, --file    rm filename
+    '''
+
+    mandatory_params = dict.fromkeys(["string"])
+    
+
+    try:
+        opts,args = getopt.getopt(argv, "hf:",["help", "file"])
+    except getopt.GetoptError as error:
+        print(error)
+        print(usage)
+        sys.exit(2)
+    for opt,arg in opts:
+        if opt in ("-h", "--help"):
+            print(usage)
+            sys.exit()
+        elif opt in ("-f", "--filename"):
+            mandatory_params["filename"] = arg 
+
+    generate(Path(mandatory_params["filename"]).read_text())
+
+
+def generate(lines):   
+    lastKeyword = ''
+    name=''
+    action=''
+    attributes=''
+    rule=''
+    options=''
+    rules=[]
+
+    for line in lines.splitlines():     
+        if line.startswith('name:') : 
+            if lastKeyword in ('attributes','rule', 'options'):
+                rules.append(Rule(name,action,attributes,rule, options))
+            elif lastKeyword not in (''):
+                throwError('File is not correct!')
+            lastKeyword='name'
+            name = parseName(line)
+        elif line.startswith('action:'):
+            lastKeyword='action'
+            action = parseAction(line)
+        elif line.startswith('attributes:'):
+            lastKeyword='attributes'
+            attributes = parseAttributes(line)
+        elif line.startswith('rule:'):
+            lastKeyword='rule'
+            rule = parseRule(line, action)
+        elif line.startswith('options:'):
+            lastKeyword='options'
+            options = parseOptions(line)
+        else:
+            if len(line) > 0:
+                print('Only the following keywords are allowed: name, action, attributes, rule, options. However, another word is used in the line:' + line)
+
+    rules.append(Rule(name,action,attributes,rule, options))
+    result=[]
+    for rule in rules:
+        result.append(createFunction(rule))
+    fileHelper.writeFile("test",  "\n// magic-rule ¯\\_(ツ)_/¯".join(result))
+
+
+
+if __name__ == "__main__":
+        main(sys.argv[1:])
