@@ -22,8 +22,11 @@ function TestRunner({functions}) {
 
     return (
         <div>
+            <div className="container">
+                <h2>Tests</h2>
+            </div>
             <div className="container" align="right">
-            <h2>Result</h2>
+                {Object.keys(resultRender).length !== 0 ? <h3>Test Summary</h3> : <h3/>}
                 {Object.entries(resultRender).map(([key, value]) => <div><span>{key}: {value}</span></div>)}
             </div>
             {functions.map(fun => {
