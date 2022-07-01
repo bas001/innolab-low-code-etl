@@ -2,15 +2,14 @@ import logo from './hat.png';
 import TestEditor from "./components/TestEditor";
 import {useState} from "react";
 import TestCase from "./model";
+import RuleEditor from "./components/RuleEditor";
 
 
 function App() {
 
     const [functions, setFunctions] = useState([]);
 
-    const changeHandler = async (event) => {
-        const content = await event.target.files[0].text();
-
+    function parseFunctions(content) {
         const funArray = content.split('// magic-rule ¯\\_(ツ)_/¯');
         const functions = funArray.map(fun => {
             const start = fun.indexOf("metainformation-start") + "metainformation-start".length
@@ -21,6 +20,11 @@ function App() {
         })
 
         setFunctions(functions)
+    }
+
+    const changeHandler = async (event) => {
+        const content = await event.target.files[0].text();
+        parseFunctions(content);
     };
 
     return (
@@ -34,8 +38,11 @@ function App() {
             </nav>
             <br/>
             <div className="container">
+                <h2>Import</h2>
                 <input className="btn btn-outline-success" type="file" name="file" onChange={changeHandler}/>
             </div>
+            <br/>
+            <RuleEditor onSave={parseFunctions}/>
             <br/>
             <TestEditor functions={functions}/>
         </div>
