@@ -33,3 +33,8 @@ action: if-else
 attributes: sex : String -> gender : String
 rule: (sex === 'Male' -> 'M', sex === 'Female' -> 'F', sex === 'Divers' -> 'D')
 options: ( no-match : 'Unknown' )
+
+name: getAge
+action: custom
+attributes: birthdate : String -> age : Number
+rule: (Math.floor((new Date() - new Date(birthdate))/1000/60/60/24/365))

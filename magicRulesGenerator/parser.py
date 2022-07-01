@@ -2,9 +2,11 @@ import utils.fileHelper as fileHelper
 from model import Rule
 from model import Parameter
 from model import Actions
-from model import IfElseRule
 from model import ParameterTypes
 from utils.errorHandler import throwError
+from utils.helper import stripStrings
+from utils.helper import extractIfElseRule
+from utils.helper import extractCustomRule
 from validator import validateParamType
 from validator import validateParamCount
 from generator.createGroupBy import createGroupBy
@@ -12,6 +14,7 @@ from generator.createSummation import createSummation
 from generator.createConcat import createConcat
 from generator.createSplitting import createSplitting
 from generator.createIfElse import createIfElse
+from generator.createCustom import createCustom
 from generator.getHeader import getHeader
 import getopt
 import sys
@@ -32,11 +35,24 @@ def parseAction(actionLine):
         return Actions.SUMMATION
     elif action == 'splitting':
         return Actions.SPLITTING
+    elif action == 'custom':
+        return Actions.CUSTOM
     else:
         throwError("Action type '" + action + "' is unknown!")
 
-def stripStrings(arr):
-    return [item.strip() for item in arr]
+ACTION_FUNCTIONS = {
+    Actions.CONCAT : createConcat,
+    Actions.GROUP_BY : createGroupBy,
+    Actions.SUMMATION : createSummation,
+    Actions.SPLITTING : createSplitting,
+    Actions.IF_ELSE : createIfElse,
+    Actions.CUSTOM : createCustom
+}
+
+def createFunction(rule:Rule):
+    result= getHeader(rule)
+    result+= ACTION_FUNCTIONS[rule.action](rule)
+    return result
 
 def parseParamType(paramType):
     if paramType == 'String':
@@ -64,38 +80,20 @@ def extractParams(str, action):
     validateParamCount(extractedParams, action)
     return extractedParams
 
-def extractIfElseRule(ruleString):
-    extractedIfElseRules = []
-    for r in stripStrings(ruleString.lstrip('(').rstrip(')').split(',')):
-        ruleEntries = stripStrings(r.split('->'))
-        extractedIfElseRules.append(IfElseRule(ruleEntries[0], ruleEntries[1].strip('"')))
-    return extractedIfElseRules
-
 def parseAttributes(attributesLine, action):
     return extractParams(attributesLine.split('attributes:')[1].strip(), action)
 
 def parseRule(ruleLine, action):
     ruleString = ruleLine.split('rule:')[1].strip()
-    if action != Actions.IF_ELSE:
+    if action == Actions.IF_ELSE:
+        return extractIfElseRule(ruleString)
+    elif action == Actions.CUSTOM:
+        return extractCustomRule(ruleString)
+    else: 
         return ruleString
-    return extractIfElseRule(ruleString)
 
 def parseOptions(optionLine):
     return optionLine.split('options:')[1].strip()
-
-def createFunction(rule:Rule):
-    result= getHeader(rule)
-    if rule.action == Actions.CONCAT:
-        result+= createConcat(rule)
-    elif rule.action == Actions.GROUP_BY:
-        result+= createGroupBy(rule)
-    elif rule.action == Actions.SUMMATION:
-        result+= createSummation(rule)
-    elif rule.action == Actions.SPLITTING:
-        result+= createSplitting(rule)
-    elif rule.action == Actions.IF_ELSE:
-        result+= createIfElse(rule)     
-    return result
 
 def main(argv):
     usage = '''usage: parser.py [options] -f <rm-filename> -o <output-filename>
@@ -107,7 +105,6 @@ def main(argv):
 
     mandatory_params = dict.fromkeys(["rmFilename", "outputFilename"])
     
-
     try:
         opts,args = getopt.getopt(argv, "hf:o:",["help", "rmFilename", "outputFilename"])
     except getopt.GetoptError as error:

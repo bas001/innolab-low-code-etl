@@ -4,6 +4,7 @@ class Actions:
     IF_ELSE     = 'if-else'
     SUMMATION   = 'summation'
     SPLITTING   = 'splitting'
+    CUSTOM      = 'custom'
 
 class ParameterTypes:
     STRING      = 'String'
